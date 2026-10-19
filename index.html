@@ -246,14 +246,13 @@ function buildSteps(wid, wk){
     return st;
   }
   st.push(timerStep('warm','Warm-up',300,'bike',{notes:['3 min easy bike or elliptical','Bird dog: 5 per side','Dead bug: 5 per side','10 glute bridges']}));
-  const pair = (ids, sets, r1, r2, g) => {
-    for(let s=1;s<=sets;s++) ids.forEach((id,i)=>{
-      st.push({kind:'set',ex:id,set:s,sets,label:g+(i+1),rest:i===0?r1:r2});
-    });
+  // straight sets: finish every set of one exercise before moving to the next machine
+  const block = (ids, sets, rest, g) => {
+    ids.forEach((id,i)=>{ for(let s=1;s<=sets;s++) st.push({kind:'set',ex:id,set:s,sets,label:g+(i+1),rest}); });
   };
-  pair(w.A, ph.aSets, 40, ph.rest, 'A');
-  pair(w.B, ph.bSets, 40, ph.rest, 'B');
-  pair(w.C, ph.cSets, 20, 45, 'C');
+  block(w.A, ph.aSets, ph.rest, 'A');
+  block(w.B, ph.bSets, ph.n===1?60:75, 'B');
+  block(w.C, ph.cSets, 45, 'C');
   st[st.length-1].rest = 30;
   st.push(timerStep('fin','Zone 2 finisher',ph.fin*60,'walk',{bpm:1,notes:['Elliptical or incline walk','122–140 bpm on your Watch','Steady pace, nose breathing if you can']}));
   return st;
@@ -537,7 +536,7 @@ function sheetHtml(){
     }
     if(seen.has(s.ex+'#shown')) return; seen.add(s.ex+'#shown');
     const g = s.label[0];
-    if(g!==lastG){ lastG=g; h += '<div class="grp">'+(g==='A'?'Pair A · main':g==='B'?'Pair B':'Circuit C')+'</div>'; }
+    if(g!==lastG){ lastG=g; h += '<div class="grp">'+(g==='A'?'A · main lifts':g==='B'?'B · second lifts':'C · small muscles')+'</div>'; }
     const e = ex(s.ex,wk), t = target(s.ex,w.id,wk), adv = advice(s.ex,w.id,wk);
     h += '<div class="row"><canvas data-an="'+e.an+'" data-c="'+w.g[0]+'"></canvas><div style="min-width:0"><div class="rn">'+esc(s.label+' · '+e.n)+'</div><div class="rm num">'+s.sets+' × '+tStr(t)+' · '+esc(e.eq)+'</div><div class="rm">'+esc(e.cue)+'</div>'+(adv.tag && adv.tag!=='New'?'<div class="rl">'+esc(adv.text)+'</div>':'')+'</div></div>';
   });
