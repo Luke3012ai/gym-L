@@ -191,15 +191,15 @@ const LIFTS = ['UA','LA','UB','LB'];
 const EX = {
   chest_press:{n:'Chest press',eq:'Seated machine',cue:'Shoulder blades back and down. Breathe out as you push.',an:'chest_press',kg:2.5},
   cs_row:{n:'Chest-supported row',eq:'Machine or incline bench + dumbbells',cue:'Chest stays on the pad, so your back is unloaded.',an:'cs_row',kg:2.5},
-  db_shp:{n:'Seated shoulder press',eq:'Dumbbells, back on the bench',cue:'Press slightly in front of your face. Don’t arch your back.',an:'db_shp',kg:1,lo:10,hi:12},
-  lat_pd:{n:'Lat pulldown',eq:'Cable, wide bar',cue:'Pull your elbows to your ribs. No leaning back.',an:'lat_pd',kg:2.5,lo:10,hi:12},
+  db_shp:{n:'Seated shoulder press, neutral grip',eq:'Dumbbells, palms facing, back on the bench',cue:'Go lighter and stop below the point of pain. Still hurts? Swap for a landmine press.',an:'db_shp',kg:1,lo:10,hi:12},
+  lat_pd:{n:'Lat pulldown',eq:'Cable, wide bar',cue:'Pull to your upper chest, shoulder blades down. No shrugging, never behind the neck.',an:'lat_pd',kg:2.5,lo:10,hi:12},
   tri_pd:{n:'Triceps pushdown',eq:'Cable, rope',cue:'Elbows pinned to your sides.',an:'tri_pd',kg:2.5,lo:12,hi:15},
-  face_pull:{n:'Face pull',eq:'Cable, rope at eye height',cue:'Pull to your forehead, thumbs going back.',an:'face_pull',kg:2.5,lo:15,hi:15},
+  face_pull:{n:'Face pull',eq:'Cable, rope at eye height',cue:'Pull to your forehead, squeeze shoulder blades. Key exercise for your upper back.',an:'face_pull',kg:2.5,lo:15,hi:15},
   leg_press:{n:'Leg press',eq:'Machine',cue:'Stop before your lower back lifts off the pad. Feet mid-platform.',an:'leg_press',kg:5},
   leg_curl:{n:'Seated leg curl',eq:'Machine',cue:'Slow on the way back: 2–3 seconds.',an:'leg_curl',kg:2.5},
   goblet:{n:'Goblet squat to box',eq:'Dumbbell + box',cue:'Sit back to touch the box, chest tall, then stand.',an:'goblet',kg:2,lo:10,hi:10},
   pallof:{n:'Pallof press',eq:'Cable at chest height',cue:'Resist the twist. Keep breathing normally.',an:'pallof',kg:2.5,lo:10,hi:10,side:1},
-  calf:{n:'Calf raise',eq:'Machine or step',cue:'Full stretch at the bottom, pause at the top.',an:'calf',kg:5,lo:15,hi:15},
+  calf:{n:'Single-leg heel raise',eq:'Step, rolled towel under your toes',cue:'Right foot first. 3 s up, 2 s hold, 3 s down. Hold a dumbbell when 12 gets easy.',an:'calf',kg:2,lo:8,hi:12,side:1},
   abduct:{n:'Hip abduction',eq:'Machine',cue:'Controlled, no bouncing.',an:'abduct',kg:2.5,lo:15,hi:15},
   pulldown_n:{n:'Neutral-grip pulldown',eq:'Cable, V-handle (or assisted pull-up)',cue:'Full stretch at the top, elbows to your ribs.',an:'pulldown_n',kg:2.5},
   incline_db:{n:'Incline dumbbell press',eq:'Dumbbells, bench at 30°',cue:'Lower to chest level. Breathe out as you press.',an:'incline_db',kg:1},
@@ -211,7 +211,7 @@ const EX = {
   leg_ext:{n:'Leg extension',eq:'Machine',cue:'Pause 1 s at the top.',an:'leg_ext',kg:2.5},
   hinge:{n:'Romanian deadlift',eq:'Light dumbbells',cue:'Push your hips back, flat back, stop at mid-shin.',an:'hinge',kg:1,lo:10,hi:10},
   dead_bug:{n:'Dead bug',eq:'Floor mat',cue:'Lower back pressed to the floor. Breathe out as you extend.',an:'dead_bug',kg:null,lo:6,hi:6,side:1},
-  step_up:{n:'Step-up',eq:'Low box + dumbbells',cue:'Drive through the front heel. Box at knee height or lower.',an:'step_up',kg:1,lo:10,hi:10,side:1},
+  step_up:{n:'Step-up',eq:'Low box + dumbbells',cue:'Low box. If your foot hurts, do split squats in place instead.',an:'step_up',kg:1,lo:10,hi:10,side:1},
   side_plank:{n:'Side plank',eq:'Floor mat',cue:'Hips high. Keep breathing, never hold your breath.',an:'side_plank',kg:null,secs:30,side:1}
 };
 function phase(w){
@@ -241,11 +241,11 @@ function timerStep(key, title, secs, an, extra){ return Object.assign({kind:'tim
 function buildSteps(wid, wk){
   const w = W[wid], ph = phase(wk), st = [];
   if(w.cardio){
-    st.push(timerStep('z2','Zone 2 cardio',ph.z2*60,'walk',{bpm:1,notes:['Elliptical or incline walk','Keep 122–140 bpm on your Watch','You can talk in sentences, but not sing']}));
-    st.push(timerStep('core','Core finisher',300,'bird_dog',{notes:['Bird dog: 6 per side','Dead bug: 6 per side','Side plank: 20–30 s per side']}));
+    st.push(timerStep('z2','Zone 2 cardio',ph.z2*60,'bike',{bpm:1,notes:['Bike or elliptical (easier on your foot)','Keep 122\u2013140 bpm on your Watch','You can talk in sentences, but not sing']}));
+    st.push(timerStep('core','Core + back',360,'bird_dog',{notes:['Bird dog: 6 per side','Dead bug: 6 per side','Side plank: 20\u201330 s per side','Open book 8/side + doorway chest stretch 30 s \u00d7 2']}));
     return st;
   }
-  st.push(timerStep('warm','Warm-up',300,'bike',{notes:['3 min easy bike or elliptical','Bird dog: 5 per side','Dead bug: 5 per side','10 glute bridges']}));
+  st.push(timerStep('warm','Warm-up',360,'bike',{notes:['3 min easy bike','Open book 8/side + cat-cow 8','Foam roller across upper back 60 s','Foot: pull toes back 30 s \u00d7 2','Bird dog 5/side + 10 glute bridges']}));
   // straight sets: finish every set of one exercise before moving to the next machine
   const block = (ids, sets, rest, g) => {
     ids.forEach((id,i)=>{ for(let s=1;s<=sets;s++) st.push({kind:'set',ex:id,set:s,sets,label:g+(i+1),rest}); });
@@ -254,7 +254,7 @@ function buildSteps(wid, wk){
   block(w.B, ph.bSets, ph.n===1?60:75, 'B');
   block(w.C, ph.cSets, 45, 'C');
   st[st.length-1].rest = 30;
-  st.push(timerStep('fin','Zone 2 finisher',ph.fin*60,'walk',{bpm:1,notes:['Elliptical or incline walk','122–140 bpm on your Watch','Steady pace, nose breathing if you can']}));
+  st.push(timerStep('fin','Zone 2 finisher',ph.fin*60,'bike',{bpm:1,notes:['Bike or elliptical, not incline walk (protects your foot)','122\u2013140 bpm on your Watch','Steady pace, relaxed shoulders']}));
   return st;
 }
 function plannedSets(wk){ return LIFTS.reduce((n,id)=>n+buildSteps(id,wk).filter(s=>s.kind==='set').length,0); }
@@ -510,7 +510,7 @@ function viewGuide(){
      ['LDL cholesterol','Zone 2 adds up to 3+ hours a week with walks. Don’t skip Wednesday.'],
      ['Abdominal surgery','No heavy straining, no belt bracing, no crunches. Watch your scar for any bulge.'],
      ['Reflux','No crunches or head-down positions. Sip your drink, don’t gulp.'],
-     ['Hydration','3+ litres of water a day, including your electrolyte drink before training.']].map(r=>'<div class="rule"><b>'+r[0]+'</b>'+r[1]+'</div>').join('')+'</div></section>';
+     ['Upper back + right shoulder blade','Rows, face pulls and rear delt flies every week. Pain up to 3/10 that settles by the next day is OK; sharp, or worse next morning = lower the weight or swap.'],['Right foot (plantar fascia)','Bike or elliptical for cardio, supportive shoes, no barefoot. Heel raises on a towel every other day.'],['Hydration','3+ litres of water a day, including your electrolyte drink before training.']].map(r=>'<div class="rule"><b>'+r[0]+'</b>'+r[1]+'</div>').join('')+'</div></section>';
   h += '<div class="alert"><b>Stop and get medical help</b> for chest pain or pressure, unusual breathlessness, dizziness or fainting, pain or numbness down a leg, or intense crampy belly pain with no bowel movement.</div>';
   return h + '</div>';
 }
